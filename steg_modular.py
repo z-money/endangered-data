@@ -37,8 +37,8 @@ def progress(frameCount, vidLen, out = True):
 	return percent
 
 @nb.njit
-def pixel_should_get_data(pixel, frameCount, data, randoms)
-	if()
+def pixel_should_get_data(pixel, frameCount, data, randoms):
+	return True
 
 @nb.njit
 def get_char(content, contentCount):
