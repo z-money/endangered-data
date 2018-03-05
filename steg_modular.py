@@ -80,15 +80,16 @@ for line in lines:
 		content.append(ord(c))
 
 data = None
-with open(args.data) as f:
-	reader = csv.reader(f, delimiter = args.delim)
+if(data != False):
+	with open(args.data) as f:
+		reader = csv.reader(f, delimiter = args.delim)
 
-	for row in reader:
-		row[3] = float(row[3])
-		if(data is None):
-			data = [row[3]]
-		else:
-			data.append(row[3])
+		for row in reader:
+			row[3] = float(row[3])
+			if(data is None):
+				data = [row[3]]
+			else:
+				data.append(row[3])
 
 randoms = []
 for i in range(0,1024*768):
