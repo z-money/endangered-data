@@ -14,7 +14,7 @@ def ask_for_args(args):
 	args.video = input("Video file:")
 	args.write = input("Output video file:")
 	args.data = input("Optional data file:")
-	args.delimiter = input("Delimiter:")
+	args.delim = input("Delimiter:")
 	return args
 
 parser = argparse.ArgumentParser(description='Do some steganography')
@@ -81,7 +81,7 @@ for line in lines:
 
 data = None
 with open(args.data) as f:
-	reader = csv.reader(f, delimiter = args.delimiter)
+	reader = csv.reader(f, delimiter = args.delim)
 
 	for row in reader:
 		row[3] = float(row[3])
