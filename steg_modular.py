@@ -8,6 +8,8 @@ import cv2
 import csv
 from random import uniform, randint
 import argparse
+import matplotlib.animation as animation
+import skvideo.io
 
 def ask_for_args(args):
 	args.content = input("File that holds the content to be stored:")
@@ -45,7 +47,7 @@ def progress(frameCount, vidLen, out = True):
 @nb.njit
 def pixel_should_get_data(pixel, frameCount, data, randoms, row, col, vidLen, width):
 	if pixel[2] < randoms*((data[int(float(frameCount)/float(vidLen)*len(data))]-338)/62 * 255):
-		return True
+		return False
 	return False
 
 @nb.njit
@@ -84,6 +86,9 @@ def im_func(image, frameCount, content, contentCount, data, randoms, vidLen):
 	return image, paragraph, contentCount
 
 out = cv2.VideoWriter(args.write,cv2.VideoWriter_fourcc(*'MJPG'),24.00, (1280,720))
+
+# output_dict = {'--rate':'24.00','--size':'1280x720'}
+# out = skvideo.io.FFmpegWriter(args.write,outputdict=output_dict)
 filename = args.video
 
 vid = imageio.get_reader(filename, 'ffmpeg')
@@ -116,6 +121,8 @@ for frameCount in range(len(vid)):
 	if(frameCount >= len(vid)):
 		break
 	image = vid.get_data(frameCount)
+	print(image[0][1])
+	sys.exit()
 	height, width, layers = image.shape
 	if(len(randoms) == 1):
 		for i in range(0,height*width):
@@ -157,10 +164,13 @@ for frameCount in range(len(vid)):
 			cv2.putText(image,line,(10,y),cv2.FONT_HERSHEY_SIMPLEX,fontScale=0.3,color=(255,255,255))
 	b, g, r = cv2.split(image)
 	image = cv2.merge([r,g,b])
+	# print(image[0][1])
 	out.write(image)
+	# imageio.imwrite('output\\frames\\frame_'+str(frameCount)+'.png', image)
 	progress(frameCount, len(vid))
-	# if(frameCount > 200):
-	# 	break
+	if(frameCount > 25):
+		break
 
 out.release()
+# out.close()
 print('total time: '+str(time.time()-all_start)+'s')
